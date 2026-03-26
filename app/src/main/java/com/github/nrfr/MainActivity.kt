@@ -24,22 +24,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // 初始化 Hidden API 访问
+        // Initialize Hidden API access
         HiddenApiBypass.addHiddenApiExemptions("L")
         HiddenApiBypass.addHiddenApiExemptions("I")
 
-        // 检查 Shizuku 状态
+        // Check Shizuku status
         checkShizukuStatus()
 
-        // 添加 Shizuku 权限监听器
+        // Add Shizuku permission listener
         Shizuku.addRequestPermissionResultListener { _, grantResult ->
             isShizukuReady = grantResult == PackageManager.PERMISSION_GRANTED
             if (!isShizukuReady) {
-                Toast.makeText(this, "需要 Shizuku 权限才能运行", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Shizuku permission is required to run", Toast.LENGTH_LONG).show()
             }
         }
 
-        // 添加 Shizuku 绑定监听器
+        // Add Shizuku binder listener
         Shizuku.addBinderReceivedListener {
             checkShizukuStatus()
         }
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkShizukuStatus() {
         isShizukuReady = if (Shizuku.getBinder() == null) {
-            Toast.makeText(this, "请先安装并启用 Shizuku", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please install and enable Shizuku first", Toast.LENGTH_LONG).show()
             false
         } else {
             val hasPermission = Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED

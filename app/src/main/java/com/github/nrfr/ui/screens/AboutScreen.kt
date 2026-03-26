@@ -38,12 +38,12 @@ fun AboutScreen(onBack: () -> Unit) {
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("关于")
+                        Text("About")
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -62,7 +62,7 @@ fun AboutScreen(onBack: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // 应用信息
+                // App information
                 Card(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -71,16 +71,16 @@ fun AboutScreen(onBack: () -> Unit) {
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            "功能介绍",
+                            "Features",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            "• 修改 SIM 卡的国家码配置，可用于解除部分应用的地区限制\n" +
-                                    "• 帮助使用海外 SIM 卡时获得更好的本地化体验\n" +
-                                    "• 解决部分应用识别 SIM 卡地区错误的问题\n" +
-                                    "• 无需 Root 权限，无需修改系统文件，安全且可随时还原\n" +
-                                    "• 支持 Android 8 及以上系统版本\n" +
-                                    "• 支持双卡设备，可分别配置不同国家码",
+                            "• Modify SIM card country code configuration to bypass regional restrictions in some apps\n" +
+                                    "• Improve localization experience when using overseas SIM cards\n" +
+                                    "• Fix incorrect SIM card region detection in some apps\n" +
+                                    "• No root required, no system file modifications, safe and reversible\n" +
+                                    "• Supports Android 8 and above\n" +
+                                    "• Supports dual-SIM devices with separate country code configuration",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -88,9 +88,9 @@ fun AboutScreen(onBack: () -> Unit) {
 
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                // 作者信息
+                // Author information
                 Text(
-                    "作者信息",
+                    "Author Information",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Card(
@@ -100,7 +100,7 @@ fun AboutScreen(onBack: () -> Unit) {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text("作者: Antkites")
+                        Text("Author: Antkites")
                         Text(
                             "GitHub: Ackites",
                             modifier = Modifier.clickable {
@@ -127,9 +127,9 @@ fun AboutScreen(onBack: () -> Unit) {
 
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                // 开源信息
+                // Open source information
                 Text(
-                    "开源信息",
+                    "Open Source",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Card(
@@ -140,12 +140,12 @@ fun AboutScreen(onBack: () -> Unit) {
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            "本项目已在 GitHub 开源",
+                            "This project is open source on GitHub",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
-                            "访问项目主页",
+                            "Visit Project Homepage",
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -164,7 +164,7 @@ fun AboutScreen(onBack: () -> Unit) {
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // 版权信息
+                // Copyright information
                 Text(
                     "© 2024 Antkites. All rights reserved.",
                     style = MaterialTheme.typography.bodySmall,

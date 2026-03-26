@@ -6,7 +6,7 @@ on:
       - "v*"
   workflow_dispatch:
 
-# 添加权限配置
+# Add permission configuration
 permissions:
   contents: write
 
@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 获取版本号和提交信息
+      # Get version and commit info
       - name: Get Version Info
         id: version
         run: |
@@ -28,60 +28,60 @@ jobs:
           if git rev-list --tags --max-count=1 > /dev/null 2>&1; then
               LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)
 
-              # 获取所有提交并过滤掉CI相关提交和文档提交
+              # Get all commits and filter out CI and docs commits
               ALL_COMMITS=$(git log --pretty=format:"%h %s (%an)" $LAST_TAG..HEAD | grep -v -E "ci:|docs:" || true)
 
-              # 分别获取不同类型的提交
+              # Get commits by type
               FEAT_COMMITS=$(echo "$ALL_COMMITS" | grep "^[a-f0-9]\+ feat:" || true)
               FIX_COMMITS=$(echo "$ALL_COMMITS" | grep "^[a-f0-9]\+ fix:" || true)
               OTHER_COMMITS=$(echo "$ALL_COMMITS" | grep -v "^[a-f0-9]\+ \(feat:\|fix:\)" || true)
 
-              # 组装changelog
+              # Assemble changelog
               CHANGELOG=""
               if [ ! -z "$FEAT_COMMITS" ]; then
-                  CHANGELOG+="### 功能改进\n$FEAT_COMMITS\n"
+                  CHANGELOG+="### Features\n$FEAT_COMMITS\n"
               fi
               if [ ! -z "$FIX_COMMITS" ]; then
-                  CHANGELOG+="### 问题修复\n$FIX_COMMITS\n"
+                  CHANGELOG+="### Bug Fixes\n$FIX_COMMITS\n"
               fi
               if [ ! -z "$OTHER_COMMITS" ]; then
-                  CHANGELOG+="### 其他更新\n$OTHER_COMMITS"
+                  CHANGELOG+="### Other Changes\n$OTHER_COMMITS"
               fi
           else
-              CHANGELOG="### 首次发布\n$(git log --pretty=format:"- %h %s (%an)" | grep -v "ci:" || true)"
+              CHANGELOG="### Initial Release\n$(git log --pretty=format:"- %h %s (%an)" | grep -v "ci:" || true)"
           fi
 
-          # 如果changelog为空，添加默认信息
+          # If changelog is empty, add default message
           if [ -z "$CHANGELOG" ]; then
-              CHANGELOG="### 无更新内容"
+              CHANGELOG="### No Changes"
           fi
 
-          # 输出
+          # Output
           echo -e "$CHANGELOG"
 
-          # 将 changelog 写入文件
+          # Write changelog to file
           echo -e "$CHANGELOG" > CHANGELOG.md
         shell: bash
 
-      # 设置 Java 环境
+      # Set up Java environment
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "21"
 
-      # 设置 Android SDK
+      # Set up Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # 下载替换 android.jar
+      # Download and replace android.jar
       - name: Download android.jar
         run: |
           mkdir -p $ANDROID_HOME/platforms/android-34
           curl -L https://raw.githubusercontent.com/Reginer/aosp-android-jar/refs/heads/main/android-34/android.jar -o $ANDROID_HOME/platforms/android-34/android.jar
         shell: bash
 
-      # 构建 Android APK
+      # Build Android APK
       - name: Build Android APK
         run: |
           gradle wrapper
@@ -89,23 +89,23 @@ jobs:
           ./gradlew assembleDebug
         shell: bash
 
-      # 设置 Go 环境
+      # Set up Go environment
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.23"
 
-      # 设置 Node.js 环境
+      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "21"
 
-      # 安装 Wails
+      # Install Wails
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      # 构建 Wails 应用
+      # Build Wails App
       - name: Build Wails App
         run: |
           cd nrfr-client/frontend
@@ -114,21 +114,21 @@ jobs:
           wails build
         shell: bash
 
-      # 下载最新的 Shizuku APK
+      # Download latest Shizuku APK
       - name: Download Shizuku APK
         run: |
           mkdir -p nrfr-client/build/bin/resources
           curl -L $(curl -s https://api.github.com/repos/RikkaApps/Shizuku/releases/latest | grep "browser_download_url.*apk" | cut -d '"' -f 4) -o nrfr-client/build/bin/resources/shizuku.apk
         shell: bash
 
-      # 复制 Android APK
+      # Copy Android APK
       - name: Copy Android APK
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk nrfr-client/build/bin/resources/nrfr.apk
           cp app/build/outputs/apk/debug/app-debug.apk nrfr-${{ steps.version.outputs.version }}.apk
         shell: bash
 
-      # 下载 platform-tools
+      # Download platform-tools
       - name: Download platform-tools
         run: |
           mkdir -p nrfr-client/build/bin/platform-tools
@@ -144,14 +144,14 @@ jobs:
           rm -rf platform-tools platform-tools.zip
         shell: bash
 
-      # 打包发布文件
+      # Create release archive
       - name: Create Release Archive
         run: |
           cd nrfr-client/build/bin
           7z a "../../nrfr-${{ steps.version.outputs.version }}-release.zip" ./*
         shell: bash
 
-      # 创建 Release
+      # Create Release
       - name: Create Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

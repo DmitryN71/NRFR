@@ -36,7 +36,7 @@ function App() {
             }
             setDevices(Array.isArray(deviceList) ? deviceList : []);
         } catch (err: any) {
-            setError(err.message || '获取设备列表失败');
+            setError(err.message || 'Failed to get device list');
             setDevices([]);
         } finally {
             setIsLoading(false);
@@ -57,7 +57,7 @@ function App() {
             setAppsStatus(status);
             setStep(2);
         } catch (err: any) {
-            setError(err.message || '选择设备失败');
+            setError(err.message || 'Failed to select device');
             setSelectedDevice(null);
         } finally {
             setIsLoading(false);
@@ -69,7 +69,7 @@ function App() {
             setIsLoading(true);
             setError('');
 
-            // 只安装必需的应用
+            // Only install required apps
             if (!appsStatus.shizuku) {
                 await InstallShizuku();
             }
@@ -77,16 +77,16 @@ function App() {
                 await InstallNrfr();
             }
 
-            // 检查安装结果
+            // Check installation result
             const newStatus = await CheckApps();
             setAppsStatus(newStatus);
 
-            // 只验证必需应用是否安装成功
+            // Only verify required apps installed successfully
             if (!newStatus.shizuku || !newStatus.nrfr.installed) {
-                setError('部分应用安装失败，请重试');
+                setError('Some apps failed to install, please retry');
             }
         } catch (err: any) {
-            setError(err.message || '安装应用失败');
+            setError(err.message || 'Failed to install apps');
         } finally {
             setIsLoading(false);
         }
@@ -97,14 +97,14 @@ function App() {
             setIsLoading(true);
             setError('');
 
-            // 执行更新
+            // Perform update
             await InstallNrfr();
 
-            // 检查更新结果
+            // Check update result
             const newStatus = await CheckApps();
             setAppsStatus(newStatus);
         } catch (err: any) {
-            setError(err.message || '更新应用失败');
+            setError(err.message || 'Failed to update app');
         } finally {
             setIsLoading(false);
         }
@@ -117,7 +117,7 @@ function App() {
             await StartShizuku();
             setStep(5);
         } catch (err: any) {
-            setError(err.message || '启动服务失败');
+            setError(err.message || 'Failed to start service');
         } finally {
             setIsLoading(false);
         }
@@ -128,13 +128,13 @@ function App() {
             const status = await CheckApps();
             setAppsStatus(status);
         } catch (err: any) {
-            setError(err.message || '检查应用状态失败');
+            setError(err.message || 'Failed to check app status');
         }
     };
 
     const handleNext = async (nextStep: Step) => {
         if (nextStep === 3) {
-            // 在切换到步骤3之前先检查状态
+            // Check status before switching to step 3
             await handleAppCheck();
         }
         setStep(nextStep);

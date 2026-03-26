@@ -9,6 +9,7 @@
     ],
     "allowJs": false,
     "skipLibCheck": true,
+    "typeRoots": [],
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,

@@ -17,12 +17,12 @@ export const ServiceStart: React.FC<Props> = ({device, isLoading, onStart}) => {
 
     return (
         <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-center">启动服务</h2>
+            <h2 className="text-xl font-semibold text-center">Start Service</h2>
             <div className="text-center text-sm text-gray-600 mb-4">
-                当前设备：{device.model || '未知设备'} ({device.serial})
+                Current device: {device.model || 'Unknown device'} ({device.serial})
             </div>
             <div className="p-4 bg-white/50 backdrop-blur-sm rounded-lg flex justify-between items-center">
-                <span>准备启动 Shizuku 服务</span>
+                <span>Ready to start Shizuku service</span>
                 {isLoading && (
                     <div className="animate-spin">
                         <svg className="w-4 h-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -40,7 +40,7 @@ export const ServiceStart: React.FC<Props> = ({device, isLoading, onStart}) => {
                 onClick={handleConfirm}
                 disabled={isLoading || isConfirmed}
             >
-                {isLoading ? '启动中...' : isConfirmed ? '已确认' : '确认并启动'}
+                {isLoading ? 'Starting...' : isConfirmed ? 'Confirmed' : 'Confirm & Start'}
             </button>
         </div>
     );

@@ -43,15 +43,15 @@ object CarrierConfigManager {
 
             val result = mutableMapOf<String, String>()
 
-            // 获取国家码配置
+            // Get country code config
             config.getString(CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING)?.let {
-                result["国家码"] = it
+                result["Country Code"] = it
             }
 
-            // 获取运营商名称配置
+            // Get carrier name config
             if (config.getBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, false)) {
                 config.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING)?.let {
-                    result["运营商名称"] = it
+                    result["Carrier Name"] = it
                 }
             }
 
@@ -67,10 +67,10 @@ object CarrierConfigManager {
 
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Android 10 及以上使用新 API
+                // Android 10 and above use new API
                 telephonyManager.getNetworkOperatorName(subId)
             } else {
-                // Android 8-9 使用反射获取运营商名称
+                // Android 8-9 use reflection to get carrier name
                 val createForSubscriptionId = TelephonyManager::class.java.getMethod(
                     "createForSubscriptionId",
                     Int::class.javaPrimitiveType
@@ -79,7 +79,7 @@ object CarrierConfigManager {
                 subTelephonyManager.networkOperatorName
             }
         } catch (e: Exception) {
-            // 如果获取失败，回退到默认的 TelephonyManager
+            // If retrieval fails, fall back to default TelephonyManager
             telephonyManager.networkOperatorName
         }
     }
@@ -87,7 +87,7 @@ object CarrierConfigManager {
     fun setCarrierConfig(subId: Int, countryCode: String?, carrierName: String? = null) {
         val bundle = PersistableBundle()
 
-        // 设置国家码
+        // Set country code
         if (!countryCode.isNullOrEmpty() && countryCode.length == 2) {
             bundle.putString(
                 CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING,
@@ -95,7 +95,7 @@ object CarrierConfigManager {
             )
         }
 
-        // 设置运营商名称
+        // Set carrier name
         if (!carrierName.isNullOrEmpty()) {
             bundle.putBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, true)
             bundle.putString(CarrierConfigManager.KEY_CARRIER_NAME_STRING, carrierName)
